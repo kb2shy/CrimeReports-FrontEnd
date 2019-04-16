@@ -175,8 +175,23 @@ function displayChargesForm(data) {
 
   chargeForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log(imageURL + " " + inputFirstName.value + " " + inputLastName.value + " " + calendar.value);
-    console.log(data.go_number + ' ' + data.crime_subcategory + ' ' + data.neighborhood + " " + data.occ_datetime);
+    let c = new Case();
+    c.imageurl = imageURL;
+    c.firstname = inputFirstName.value;
+    c.lastname = inputLastName.value;
+    c.courtdate = calendar.value;
+    c.gonumber = data.go_number;
+    c.crime = data.crime_subcategory;
+    c.neighborhood = data.neighborhood;
+    c.dov = data.occ_datetime;
+    // console.log(c);
+    fetch("http://localhost:3000/cases", {
+      method: "POST",
+      headers: { 'Content-Type' : 'application/json',
+                       Accept: 'application/json'},
+      body: JSON.stringify(c)
+    })
+    .then(response => response.json())
   })
 
 }
@@ -224,3 +239,25 @@ fetchCriminalInfo.addEventListener('submit', (e) => {
   .then(response => response.json())
   .then(data => displayData(data, date))
 })
+
+class Case {
+  constructor (imageurl, firstname, lastname, courtdate, gonumber, crime, neighborhood, dov){
+    this.imageurl = imageurl;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.courtdate = courtdate;
+    this.gonumber = gonumber;
+    this.crime = crime;
+    this.neighborhood = neighborhood;
+    this.dov = dov;
+    this.events = "";
+    Case.all.push(this);
+  }
+
+  update({courtDate, events}) {
+    this.courtDate = courtDate;
+    this.events = events;
+  }
+}
+
+Case.all = []
