@@ -62,7 +62,6 @@ const MUGSHOT = ["https://imgix.ranker.com/user_node_img/50060/1001191352/origin
  "https://imgix.ranker.com/user_node_img/50063/1001257827/original/h-photo-u1?w=650&q=60&fm=pjpg&fit=crop&crop=faces%22"
  ]
 
-
 const displayPane = document.getElementById("display-info");
 
 const displayData = (data, date) => {
@@ -101,33 +100,84 @@ const displayData = (data, date) => {
 
 function displayChargesForm(data) {
   clearDisplayPane();
-  //
-  // let imageURL = MUGSHOT[Math.random() * 50]
-  // console.log(imageURL)
 
-  displayPane.innerHTML = `
-  <form class="" action="index.html" method="post">
-    <div class="row">
-      <img src="" alt="picture of random funny mugshot">
-    </div>
-    <div class="row form-row">
-      <div class="form-group col-md-6">
-        <label for="inputFirstName">First Name</label>
-        <input type="text" class="form-control" id="inputFirstName" placeholder="First Name">
-      </div>
-      <div class="form-group col-md-6">
-        <label for="inputMiddleName">Last Name</label>
-        <input type="text" class="form-control" id="inputLastName" placeholder="Last Name">
-      </div>
-    </div>
-    <div>
-      Schedule Court Hearing: <input type="date" id="date-input" />
-    </div>
+  let br1 = document.createElement("br")
+  let br2 = document.createElement("br")
+  let br3 = document.createElement("br")
+  let br4 = document.createElement("br")
+  let br5 = document.createElement("br")
+  let br6 = document.createElement("br")
+  let br7 = document.createElement("br")
 
-    <button type="submit" class="btn btn-primary">Create Case File</button>
-  </form>
-  `;
-  let image = document.getElementsByTagName("img")
+  // create image
+  let randomNumber = Math.floor(Math.random() * 50);
+  let imageURL = MUGSHOT[randomNumber];
+  let image = document.createElement("img");
+  image.src = imageURL;
+  displayPane.append(image);
+
+  // create form
+  let chargeForm = document.createElement("form");
+  let labelFirstName = document.createElement("label");
+  labelFirstName.textContent = "First Name";
+  let inputFirstName = document.createElement("input");
+  inputFirstName.type = "text"
+  inputFirstName.id = "inputFirstName"
+
+  let labelLastName = document.createElement("label");
+  labelLastName.textContent = "Last Name";
+  let inputLastName = document.createElement("input")
+  inputLastName.type = "text"
+  inputLastName.id = "inputLastName"
+
+  let labelCourtDate = document.createElement("label");
+  labelCourtDate.textContent = "Schedule Court Appearance";
+  let calendar = document.createElement("input");
+  calendar.type = "date";
+
+  let createFileBtn = document.createElement("button");
+  createFileBtn.type = "submit"
+  createFileBtn.textContent = "Create Case File";
+
+  let dispGoNum = document.createElement("label");
+  dispGoNum.textContent = `Seattle Police Report # ${data.go_number}`
+
+  let dispCharge = document.createElement("label");
+  dispCharge.textContent = `Crime: ${data.crime_subcategory}`;
+
+  let dispNeighborhood = document.createElement("label");
+  dispNeighborhood.textContent = `In ${data.neighborhood} of Seattle`;
+
+  let dispOccDate = document.createElement("label");
+  dispOccDate.textContent = `Date crime committed: ${data.occ_datetime}`;
+
+  chargeForm.append(
+    labelFirstName,
+    inputFirstName,
+    br1,
+    labelLastName,
+    inputLastName,
+    br2,
+    labelCourtDate,
+    calendar,
+    br3,
+    dispGoNum,
+    br4,
+    dispCharge,
+    br5,
+    dispNeighborhood,
+    br6,
+    dispOccDate,
+    br7,
+    createFileBtn);
+
+  displayPane.append(chargeForm);
+
+  chargeForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    console.log(imageURL + " " + inputFirstName.value + " " + inputLastName.value + " " + calendar.value);
+    console.log(data.go_number + ' ' + data.crime_subcategory + ' ' + data.neighborhood + " " + data.occ_datetime);
+  })
 
 }
 
