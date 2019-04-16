@@ -1,0 +1,21 @@
+
+<form class="" action="index.html" method="post">
+  <div class="row">
+    <img src="" alt="picture of random funny mugshot">
+  </div>
+  <div class="row form-row">
+    <div class="form-group col-md-6">
+      <label for="inputFirstName">First Name</label>
+      <input type="text" class="form-control" id="inputFirstName" placeholder="First Name">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputMiddleName">Last Name</label>
+      <input type="text" class="form-control" id="inputLastName" placeholder="Last Name">
+    </div>
+  </div>
+  <div>
+    Schedule Court Hearing: <input type="date" id="date-input" />
+  </div>
+
+  <button type="submit" class="btn btn-primary">Create Case File</button>
+</form>
