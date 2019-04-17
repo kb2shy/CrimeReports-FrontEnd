@@ -188,12 +188,59 @@ function displayChargesForm(data) {
     fetch("http://localhost:3000/cases", {
       method: "POST",
       headers: { 'Content-Type' : 'application/json',
-                       Accept: 'application/json'},
+                  Accept: 'application/json'},
       body: JSON.stringify(c)
     })
     .then(response => response.json())
+    displayNewCaseFile(c)
   })
 
+}
+
+function displayNewCaseFile(c) {
+  clearDisplayPane();
+  fetch("http://localhost:3000/cases")
+  .then(response => response.json())
+  .then(cases => {
+    let br1 = document.createElement("br");
+    let br2 = document.createElement("br");
+    let br3 = document.createElement("br");
+    let caseNum = cases.length;
+    let h1 = document.createElement("h1")
+    h1.textContent = `CITY OF SEATTLE VS. ${c.firstname} ${c.lastname}`
+    let pic = document.createElement("img")
+    pic.src = c.imageurl;
+    let caseNo = document.createElement("h3");
+    caseNo.textContent = `Case #${caseNum}`;
+    let caseCharge = document.createElement("h3");
+    caseCharge.textContent = `Charged with ${c.crime}`
+
+    // create case event form
+    let eventForm = document.createElement("form");
+    let labelCaseEvent = document.createElement("label");
+    labelCaseEvent.textContent = "Case Event(s)";
+    let inputCaseEvent = document.createElement("input");
+    inputCaseEvent.type = "text";
+    let eventBtn = document.createElement("button");
+    eventBtn.textContent = "Submit";
+    eventForm.append(labelCaseEvent, inputCaseEvent, br1, submitBtn);
+
+    // create calendar form
+    let formCalendar = document.createElement("form");
+    let labelCalendar = document.createElement("label");
+    labelCalendar.textContent = "Schedule future date";
+    let inputCalendar = document.createElement("input");
+    inputCalendar.type = "date";
+    let scheduleBtn = document.createElement("button");
+    scheduleBtn.textContent = "Schedule future hearing";
+    formCalendar.append(abelCalendar, inputCalendar, br2, scheduleBtn)
+
+    // display the case file
+    displayPane.append(h1, pic, caseNo, caseCharge, eventForm, formCalendar);
+  })
+  // let row1 = document.createElement("div");
+  // row1.class = "row";
+  // let row = document.createElement("");
 }
 
 function clearDisplayPane() {
