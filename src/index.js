@@ -1,10 +1,7 @@
-// document.addEventListener('DOMContentLoaded', () => {
-//   const app = new App();
-//   app.attachEventListeners();
-//
-//   app.adapter.fetchNotes().then(app.createNotes);
-// });
+// Backend Database
+const DB_URL = "http://localhost:3000/cases"
 
+// Seattle.gov SPD police report API
 const SPD_API_URL = "https://data.seattle.gov/resource/4fs7-3vj5.json"
 const DOV_URL = "?reported_date=";
 const TIME_APPEND = "T00:00:00.000";
@@ -62,6 +59,87 @@ const MUGSHOT = ["https://imgix.ranker.com/user_node_img/50060/1001191352/origin
  "https://imgix.ranker.com/user_node_img/50063/1001257827/original/h-photo-u1?w=650&q=60&fm=pjpg&fit=crop&crop=faces%22"
  ]
 
+// -----------------------------------------------------------------
+// Get case file from database
+// -----------------------------------------------------------------
+const searchCaseForm = document.getElementById("searchCaseForm");
+searchCaseForm.addEventListener("submit", (e)=> {
+  e.preventDefault();
+  let searchCaseNumber = searchCaseForm[0].value;
+  fetch(DB_URL + `/${searchCaseNumber}`)
+  .then(response => response.json())
+  .then(info => displayCaseFile(info))
+})
+
+function displayCaseFile(info) {
+  clearDisplayPane();
+
+  // display case info
+  let seattlevh1 = document.createElement("h1")
+  seattlevh1.textContent = `CITY OF SEATTLE VS. ${info.firstname} ${info.lastname}`
+  let pic = document.createElement("img")
+  pic.src = info.imageurl;
+  let caseNo = document.createElement("h3");
+  caseNo.textContent = `Case #${info.id}`;
+  let caseCharge = document.createElement("h3");
+  caseCharge.textContent = `Charged with ${info.crime}`
+  let caseDate = document.createElement("h3");
+  caseDate.textContent = `Next Court date ${info.courtdate.substr(0,10)}`;
+  displayPane.append(seattlevh1, pic, caseNo, caseCharge, caseDate);
+
+  // display any previous case events
+  let eventsText = info.events;
+  let docketHeader = document.createElement("h3");
+  docketHeader.textContent = "Docket Information:";
+  let docketSeparater1 = document.createElement("hr");
+  let eventsUl = document.createElement("ul");
+  for (let evt of eventsText) {
+    let li = document.createElement("li");
+    li.textContent = evt;
+    ul.append(li);
+  }
+  let docketSeparater2 = document.createElement("hr");
+  displayPane.append(docketHeader, docketSeparater1, eventsUl, docketSeparater2);
+
+  // create case event form
+  let eventForm = document.createElement("form");
+  eventForm.id = "addEvent";
+  let labelCaseEvent = document.createElement("label");
+  labelCaseEvent.textContent = "Add Case Event";
+  let inputCaseEvent = document.createElement("input");
+  inputCaseEvent.type = "text";
+  let br1 = document.createElement("br")
+  let eventBtn = document.createElement("button");
+  eventBtn.textContent = "Submit";
+  eventBtn.type = "submit";
+  eventForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let item = document.createElement("li");
+    item.textContent = inputCaseEvent.value;
+    eventsUl.append(item);
+    console.log("Event form button pressed. Value of inputCaseEvent is: " + inputCaseEvent.value)
+  })
+  eventForm.append(labelCaseEvent, inputCaseEvent, br1, eventBtn);
+
+  // create calendar form
+  // let formCalendar = document.createElement("form");
+  // let labelCalendar = document.createElement("label");
+  // labelCalendar.textContent = "Schedule future date";
+  // let inputCalendar = document.createElement("input");
+  // inputCalendar.type = "date";
+  // let br2 = document.createElement("br")
+  // let scheduleBtn = document.createElement("button");
+  // scheduleBtn.textContent = "Schedule future hearing";
+  // formCalendar.append(labelCalendar, inputCalendar, br2, scheduleBtn)
+
+  // display the case file
+  displayPane.append(eventForm);
+}
+
+
+// -----------------------------------------------------------------
+// Create a Criminal from SPD website
+// -----------------------------------------------------------------
 const displayPane = document.getElementById("display-info");
 
 const displayData = (data, date) => {
