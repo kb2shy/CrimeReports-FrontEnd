@@ -14,16 +14,25 @@
   </head>
   <body>
 
-    <div class="container-fluid">
+    <div class="container">
       <div class="row">
         <div class="col-6">
+          <!-- Upper Left View -->
           <h1>Find Case Information</h1>
           <form class="" action="index.html" method="post" id="searchCaseForm">
             <label for="search-case">Case No:</label>
             <input type="text" name="" value="" placeholder="Case #">
             <input type="submit" name="" value="Search">
           </form>
+          <hr>
+          <h1>Court Session</h1>
+          <form class="" action="index.html" method="post" id="searchSession">
+            <label for="">Get cases scheduled for: </label>
+            <input type="date" name="" value="">
+            <input type="submit" name="" value="Session">
+          </form>
         </div>
+        <!-- Upper Right View -->
         <div class="vl"></div>
         <div class="col-6">
           <h1>Create a Criminal</h1>
@@ -42,21 +51,22 @@
           </form>
         </div>
       </div>
+      <hr>
     </div>
-
-
-
     <br>
-    <hr>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-8" id="display-info">
 
-        </div>
+    <!-- lower display pane view -->
+    <div class="container">
+      <div class="row" id="display-info">
+
+
+        <!-- <div class="col" id="display-info">
+
+        </div> -->
       </div>
     </div>
-
+<!--
     <div class="" id="update">
-    </div>
+    </div> -->
   </body>
 </html>

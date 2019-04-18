@@ -8,6 +8,11 @@ const DOV_URL = "?reported_date=";
 const TIME_APPEND = "T00:00:00.000";
 const CRIME_URL = "&crime_subcategory=";
 
+// Establish date info
+const MONTH = ["January", "February", "March", "April", "May", "June", "July",
+               "August", "September", "October", "November", "December"];
+const DAY_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
 const MUGSHOT = ["https://imgix.ranker.com/user_node_img/50060/1001191352/original/b-photo-u1?w=650&q=50&fm=pjpg&fit=crop&crop=faces",
  "https://imgix.ranker.com/user_node_img/50060/1001191368/original/j-photo-u1?w=650&q=50&fm=pjpg&fit=crop&crop=faces",
  "https://imgix.ranker.com/user_node_img/50060/1001191376/original/j-photo-u1?w=650&q=50&fm=pjpg&fit=crop&crop=faces",
@@ -72,21 +77,36 @@ searchCaseForm.addEventListener("submit", (e)=> {
   .then(info => displayCaseFile(info))
 })
 
+// -----------------------------------------------------------------
+// Display case file from database
+// -----------------------------------------------------------------
 function displayCaseFile(info) {
   clearDisplayPane();
 
-  // display case info
-  let seattlevh1 = document.createElement("h1")
-  seattlevh1.textContent = `City of Seattle vs. ${info.firstname} ${info.lastname}`
+  // create case image div
+  let divCaseImage = document.createElement("div");
+  divCaseImage.setAttribute("class", "col-md-4");
   let pic = document.createElement("img")
   pic.src = info.imageurl;
+  pic.setAttribute("class", "img img-thumbnail");
+  divCaseImage.append(pic);
+
+  // display case info
+  let divCaseInfo = document.createElement("div");
+  divCaseInfo.setAttribute("class", "col-md-8");
+  let seattlevh1 = document.createElement("h1");
+  seattlevh1.textContent = `City of Seattle vs. ${info.firstname} ${info.lastname}`
   let caseNo = document.createElement("h3");
   caseNo.textContent = `Case #${info.id}`;
   let caseCharge = document.createElement("h3");
   caseCharge.textContent = `Charged with ${info.crime}`
+
+  // grab and display court date
+  let crtDate = info.courtdate.split("-");
+  let cdStr = `${MONTH[parseInt(crtDate[1] - 1)]} ${crtDate[2].substr(0,2)}, ${crtDate[0]}`;
   let caseDate = document.createElement("h3");
-  caseDate.textContent = `Next Court date ${info.courtdate.substr(0,10)}`;
-  displayPane.append(seattlevh1, pic, caseNo, caseCharge, caseDate);
+  caseDate.textContent = `Next court date: ${cdStr}`;
+  divCaseInfo.append(seattlevh1, caseNo, caseCharge, caseDate);
 
   // display any previous case events
   let eventsText = info.events;
@@ -100,7 +120,7 @@ function displayCaseFile(info) {
     eventsUl.append(li);
   }
   let docketSeparater2 = document.createElement("hr");
-  displayPane.append(docketHeader, docketSeparater1, eventsUl, docketSeparater2);
+  divCaseInfo.append(docketHeader, docketSeparater1, eventsUl, docketSeparater2);
 
   // create case event form
   let eventForm = document.createElement("form");
@@ -126,14 +146,14 @@ function displayCaseFile(info) {
       body: JSON.stringify(caseEvent)
     })
     .then(response => response.json())
-    console.log(inputCaseEvent.value="")
+    inputCaseEvent.value="";
   })
   eventForm.append(labelCaseEvent, inputCaseEvent, br1, eventBtn);
+  divCaseInfo.append(eventForm);
 
-  // display the case file
-  displayPane.append(eventForm);
+  // append info to display pane
+  displayPane.append(divCaseImage, divCaseInfo);
 }
-
 
 // -----------------------------------------------------------------
 // Create a Criminal from SPD website
@@ -142,14 +162,23 @@ const displayPane = document.getElementById("display-info");
 
 const displayData = (data, date) => {
   clearDisplayPane();
+  let thisDate = date.split("-")
+  let thisYear = thisDate[0];
+  let thisMonth = thisDate[1] - 1;
+  let thisDay = thisDate[2].substr(0,2);
+  thisDate = MONTH[thisMonth] + " " + thisDay + ", " + thisYear;
   const h3 = document.createElement("h3")
-  h3.textContent = date;
+  // console.log(thisDate)
+  h3.textContent = `Crimes committed on ${thisDate}`;
   const tableDisplay = document.createElement("table");
+  tableDisplay.setAttribute("class", "table table-dark table-bordered");
   const header = document.createElement("tr");
   header.innerHTML = `
   <tr>
     <th>Incident #</th>
-    <th>neighborhood</th>
+    <th>Crime</th>
+    <th>Neighborhood</th>
+    <th>File Charges?</th>
   </tr>`;
   tableDisplay.append(header);
 
@@ -167,30 +196,40 @@ const displayData = (data, date) => {
     td1.textContent = d.go_number;
     td2.textContent = d.crime_subcategory;
     td3.textContent = d.neighborhood;
-    tr.append(td1, td2, btn)
+    tr.append(td1, td2, td3, btn)
     tableDisplay.append(tr)
   }
 
-  return displayPane.append(tableDisplay);
+  return displayPane.append(h3, tableDisplay);
 }
 
 function displayChargesForm(data) {
   clearDisplayPane();
 
-  let br1 = document.createElement("br")
-  let br2 = document.createElement("br")
-  let br3 = document.createElement("br")
-  let br4 = document.createElement("br")
-  let br5 = document.createElement("br")
-  let br6 = document.createElement("br")
-  let br7 = document.createElement("br")
+  let br1 = document.createElement("br");
+  let br2 = document.createElement("br");
+  let br3 = document.createElement("br");
+  let br4 = document.createElement("br");
+  let br5 = document.createElement("br");
+  let br6 = document.createElement("br");
+  let br7 = document.createElement("br");
+
+  // column for image
+  let divCFimg = document.createElement("div");
+  divCFimg.setAttribute("class", "col-md-6");
 
   // create image
   let randomNumber = Math.floor(Math.random() * 50);
   let imageURL = MUGSHOT[randomNumber];
   let image = document.createElement("img");
   image.src = imageURL;
-  displayPane.append(image);
+  image.setAttribute("class", "img-thumbnail")
+  divCFimg.append(image);
+  displayPane.append(divCFimg);
+
+  // column for form
+  let divCFform = document.createElement("div");
+  divCFform.setAttribute("class", "col-md-6");
 
   // create form
   let chargeForm = document.createElement("form");
@@ -247,7 +286,8 @@ function displayChargesForm(data) {
     br7,
     createFileBtn);
 
-  displayPane.append(chargeForm);
+  divCFform.append(chargeForm);
+  displayPane.append(divCFform);
 
   chargeForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -278,18 +318,29 @@ function displayNewCaseFile(c) {
   fetch("http://localhost:3000/cases")
   .then(response => response.json())
   .then(cases => {
-
     let caseNum = cases.length + 1;
-    let h1 = document.createElement("h1")
-    h1.textContent = `City of Seattle vs. ${c.firstname} ${c.lastname}`
-    let pic = document.createElement("img")
-    pic.src = c.imageurl;
-    let caseNo = document.createElement("h3");
-    caseNo.textContent = `Case #${caseNum}`;
-    let caseCharge = document.createElement("h3");
-    caseCharge.textContent = `Charged with ${c.crime}`
+    let dateSplit = c.courtdate.split("-");
+    let month = MONTH[parseInt(dateSplit[1])-1];
+    console.log(month)
+    debugger
+    let dateStr = `${month} ${dateSplit[2]}, ${dateSplit[0]}`
+    console.log(dateStr)
+    let div = document.createElement("div");
+    div.innerHTML = `
+    <div class="row">
+      <div class="col-md-4">
+        <img class="img img-thumbnail" src="${c.imageurl}" alt="profile pic of ${c.firstname} ${c.lastname}">
+      </div>
 
-    displayPane.append(h1, pic, caseNo, caseCharge);
+      <div class="col-md-8">
+        <h1>City of Seattle vs. ${c.firstname} ${c.lastname}</h1>
+        <h3>Case #${caseNum}</h3>
+        <h3>Charged with ${c.crime}</h3>
+        <h3>Next court appearance scheduled for ${dateStr}</h3>
+      </div>
+    </div>
+    `
+    displayPane.append(div);
   })
 }
 
