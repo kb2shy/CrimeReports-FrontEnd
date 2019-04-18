@@ -77,7 +77,7 @@ function displayCaseFile(info) {
 
   // display case info
   let seattlevh1 = document.createElement("h1")
-  seattlevh1.textContent = `CITY OF SEATTLE VS. ${info.firstname} ${info.lastname}`
+  seattlevh1.textContent = `City of Seattle vs. ${info.firstname} ${info.lastname}`
   let pic = document.createElement("img")
   pic.src = info.imageurl;
   let caseNo = document.createElement("h3");
@@ -125,34 +125,10 @@ function displayCaseFile(info) {
                   Accept: 'application/json'},
       body: JSON.stringify(caseEvent)
     })
-    // fetch(DB_CASES_URL + `/${info.id}`)
-    // .then(response => response.json())
-    // .then(caseInfo => {
-    //   let ce = caseInfo.events;
-    //   ce.push(inputCaseEvent.value);
-    //   console.log(JSON.stringify({events: ce}));
-    //   debugger
-    //   fetch(DB_CASES_URL + `/${caseInfo.id}`, {
-    //     method: "PATCH",
-    //     headers: { 'Content-Type' : 'application/json',
-    //                 Accept: 'application/json'},
-    //     body: JSON.stringify({events: ce})
-    //   })
-    //   .then(response => response.json())
-    // })
+    .then(response => response.json())
+    console.log(inputCaseEvent.value="")
   })
   eventForm.append(labelCaseEvent, inputCaseEvent, br1, eventBtn);
-
-  // create calendar form
-  // let formCalendar = document.createElement("form");
-  // let labelCalendar = document.createElement("label");
-  // labelCalendar.textContent = "Schedule future date";
-  // let inputCalendar = document.createElement("input");
-  // inputCalendar.type = "date";
-  // let br2 = document.createElement("br")
-  // let scheduleBtn = document.createElement("button");
-  // scheduleBtn.textContent = "Schedule future hearing";
-  // formCalendar.append(labelCalendar, inputCalendar, br2, scheduleBtn)
 
   // display the case file
   displayPane.append(eventForm);
@@ -294,54 +270,27 @@ function displayChargesForm(data) {
     .then(response => response.json())
     displayNewCaseFile(c)
   })
-
 }
 
 function displayNewCaseFile(c) {
   clearDisplayPane();
-  displayCaseFile(c);
-  // fetch("http://localhost:3000/cases")
-  // .then(response => response.json())
-  // .then(cases => {
-  //   let br1 = document.createElement("br");
-  //   let br2 = document.createElement("br");
-  //   let br3 = document.createElement("br");
-  //   let caseNum = cases.length;
-  //   let h1 = document.createElement("h1")
-  //   h1.textContent = `CITY OF SEATTLE VS. ${c.firstname} ${c.lastname}`
-  //   let pic = document.createElement("img")
-  //   pic.src = c.imageurl;
-  //   let caseNo = document.createElement("h3");
-  //   caseNo.textContent = `Case #${caseNum}`;
-  //   let caseCharge = document.createElement("h3");
-  //   caseCharge.textContent = `Charged with ${c.crime}`
-  //
-  //   // create case event form
-  //   let eventForm = document.createElement("form");
-  //   let labelCaseEvent = document.createElement("label");
-  //   labelCaseEvent.textContent = "Case Event(s)";
-  //   let inputCaseEvent = document.createElement("input");
-  //   inputCaseEvent.type = "text";
-  //   let eventBtn = document.createElement("button");
-  //   eventBtn.textContent = "Submit";
-  //   eventForm.append(labelCaseEvent, inputCaseEvent, br1, eventBtn);
-  //
-  //   // create calendar form
-  //   let formCalendar = document.createElement("form");
-  //   let labelCalendar = document.createElement("label");
-  //   labelCalendar.textContent = "Schedule future date";
-  //   let inputCalendar = document.createElement("input");
-  //   inputCalendar.type = "date";
-  //   let scheduleBtn = document.createElement("button");
-  //   scheduleBtn.textContent = "Schedule future hearing";
-  //   formCalendar.append(labelCalendar, inputCalendar, br2, scheduleBtn)
-  //
-  //   // display the case file
-  //   displayPane.append(h1, pic, caseNo, caseCharge, eventForm, formCalendar);
-  // })
-  // let row1 = document.createElement("div");
-  // row1.class = "row";
-  // let row = document.createElement("");
+
+  fetch("http://localhost:3000/cases")
+  .then(response => response.json())
+  .then(cases => {
+
+    let caseNum = cases.length + 1;
+    let h1 = document.createElement("h1")
+    h1.textContent = `City of Seattle vs. ${c.firstname} ${c.lastname}`
+    let pic = document.createElement("img")
+    pic.src = c.imageurl;
+    let caseNo = document.createElement("h3");
+    caseNo.textContent = `Case #${caseNum}`;
+    let caseCharge = document.createElement("h3");
+    caseCharge.textContent = `Charged with ${c.crime}`
+
+    displayPane.append(h1, pic, caseNo, caseCharge);
+  })
 }
 
 function clearDisplayPane() {
@@ -364,7 +313,6 @@ fetchCriminalInfo.addEventListener('submit', (e) => {
   } else {
     date = date + TIME_APPEND;
   }
-  // console.log(date)
 
   const crimeType = document.querySelectorAll('[name="crime_category"]');
   let charge = ""
@@ -380,8 +328,6 @@ fetchCriminalInfo.addEventListener('submit', (e) => {
   } else {
     thisURL = SPD_API_URL + DOV_URL + date;
   }
-
-  // console.log(thisURL);
 
   fetch(thisURL)
   .then(response => response.json())
