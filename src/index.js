@@ -75,6 +75,7 @@ searchCaseForm.addEventListener("submit", (e)=> {
   fetch(DB_CASES_URL + `/${searchCaseNumber}`)
   .then(response => response.json())
   .then(info => displayCaseFile(info))
+  searchCaseForm[0].value = "";
 })
 
 // -----------------------------------------------------------------
@@ -129,6 +130,7 @@ function displayCaseFile(info) {
   labelCaseEvent.textContent = "Add Case Event";
   let inputCaseEvent = document.createElement("input");
   inputCaseEvent.type = "text";
+  inputCaseEvent.id = "textArea"
   let br1 = document.createElement("br")
   let eventBtn = document.createElement("button");
   eventBtn.textContent = "Submit";

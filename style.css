@@ -3,3 +3,12 @@ body {
   background-color: #CB793A;
   background-image: linear-gradient(90deg, #CB793A, #FCDC4D);
 }
+
+#textArea {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+form {
+  padding: 5px;
+}
