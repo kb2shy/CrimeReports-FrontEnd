@@ -7,6 +7,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <meta charset="utf-8">
     <script type="text/javascript" src="src/index.js" defer></script>
+    <link rel="stylesheet" href="style.css">
     <!-- <script type="text/javascript" src="src/note.js" defer></script>
     <script type="text/javascript" src="src/app.js" defer></script>
     <script type="text/javascript" src="src/adapter.js" defer></script> -->
@@ -22,14 +23,14 @@
           <form class="" action="index.html" method="post" id="searchCaseForm">
             <label for="search-case">Case No:</label>
             <input type="text" name="" value="" placeholder="Case #">
-            <input type="submit" name="" value="Search">
+            <input type="submit" name="" value="Search" class="btn btn-outline-dark">
           </form>
           <hr>
           <h1>Court Session</h1>
           <form class="" action="index.html" method="post" id="searchSession">
             <label for="">Get cases scheduled for: </label>
             <input type="date" name="" value="" id="sessionDate">
-            <input type="submit" name="" value="Session">
+            <input type="submit" name="" value="Session" class="btn btn-outline-dark">
           </form>
         </div>
         <!-- Upper Right View -->
@@ -40,14 +41,16 @@
             <label for="">Get Seattle Police reports by date</label>
             <input type="date" name="" value="" id="date-input">
             <br><br>
-            <label for="">Charge Type</label><br>
-            <input type="radio" name="crime_category" value="DUI">DUI<br>
-            <input type="radio" name="crime_category" value="AGGRAVATED%20ASSAULT">Assault<br>
-            <input type="radio" name="crime_category" value="CAR%20PROWL">Car Prowl<br>
-            <input type="radio" name="crime_category" value="TRESPASS">Trespass<br>
-            <input type="radio" name="crime_category" value="THEFT-SHOPLIFT">Theft (Shoplift)<br>
+            <div class="radio">
+              <label for="">Charge Type</label><br>
+              <input type="radio" class="m-1" name="crime_category" value="DUI">DUI<br>
+              <input type="radio" class="m-1" name="crime_category" value="AGGRAVATED%20ASSAULT">Assault<br>
+              <input type="radio" class="m-1" name="crime_category" value="CAR%20PROWL">Car Prowl<br>
+              <input type="radio" class="m-1" name="crime_category" value="TRESPASS">Trespass<br>
+              <input type="radio" class="m-1" name="crime_category" value="THEFT-SHOPLIFT">Theft (Shoplift)<br>
+            </div>
             <br>
-            <input type="submit" name="" value="Get Crimes">
+            <input type="submit" name="" value="Get Crimes" class="btn btn-outline-dark">
           </form>
         </div>
       </div>

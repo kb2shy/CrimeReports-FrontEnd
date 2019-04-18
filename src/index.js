@@ -93,7 +93,7 @@ function displayCaseFile(info) {
 
   // display case info
   let divCaseInfo = document.createElement("div");
-  divCaseInfo.setAttribute("class", "col-md-8");
+  divCaseInfo.setAttribute("class", "col-md-8 form-group");
   let seattlevh1 = document.createElement("h1");
   seattlevh1.textContent = `City of Seattle vs. ${info.firstname} ${info.lastname}`
   let caseNo = document.createElement("h3");
@@ -211,6 +211,43 @@ function displayResults(date, cases) {
   return displayPane.append(divResultsPage);
 }
 
+// -----------------------------------------------------------------
+// Get information from SPD website
+// -----------------------------------------------------------------
+const fetchCriminalInfo = document.getElementById("get-SPD-crimes")
+fetchCriminalInfo.addEventListener('submit', (e) => {
+  e.preventDefault();
+  // console.log("Get Criminal button clicked");
+  let date = document.getElementById("date-input").value;
+  if (date === "") {
+    date = new Date();
+    let yesterday = date.getDate() - 1;
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    date = year + '-' + month + '-' + yesterday + TIME_APPEND;
+  } else {
+    date = date + TIME_APPEND;
+  }
+
+  const crimeType = document.querySelectorAll('[name="crime_category"]');
+  let charge = ""
+  for (let crime of crimeType) {
+    if (crime.checked) {
+      charge = crime.value;
+    }
+  }
+
+  let thisURL = ""
+  if (charge !== "") {
+    thisURL = SPD_API_URL + DOV_URL + date + CRIME_URL + charge;
+  } else {
+    thisURL = SPD_API_URL + DOV_URL + date;
+  }
+
+  fetch(thisURL)
+  .then(response => response.json())
+  .then(data => displayData(data, date))
+})
 
 // -----------------------------------------------------------------
 // Create a Criminal from SPD website
@@ -406,40 +443,7 @@ function clearDisplayPane() {
   }
 }
 
-const fetchCriminalInfo = document.getElementById("get-SPD-crimes")
-fetchCriminalInfo.addEventListener('submit', (e) => {
-  e.preventDefault();
-  // console.log("Get Criminal button clicked");
-  let date = document.getElementById("date-input").value;
-  if (date === "") {
-    date = new Date();
-    let yesterday = date.getDate() - 1;
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    date = year + '-' + month + '-' + yesterday + TIME_APPEND;
-  } else {
-    date = date + TIME_APPEND;
-  }
 
-  const crimeType = document.querySelectorAll('[name="crime_category"]');
-  let charge = ""
-  for (let crime of crimeType) {
-    if (crime.checked) {
-      charge = crime.value;
-    }
-  }
-
-  let thisURL = ""
-  if (charge !== "") {
-    thisURL = SPD_API_URL + DOV_URL + date + CRIME_URL + charge;
-  } else {
-    thisURL = SPD_API_URL + DOV_URL + date;
-  }
-
-  fetch(thisURL)
-  .then(response => response.json())
-  .then(data => displayData(data, date))
-})
 
 class Case {
   constructor (imageurl, firstname, lastname, courtdate, gonumber, crime, neighborhood, dov){
