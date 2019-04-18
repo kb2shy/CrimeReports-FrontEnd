@@ -105,7 +105,7 @@ function displayCaseFile(info) {
   let crtDate = info.courtdate.split("-");
   let cdStr = `${MONTH[parseInt(crtDate[1] - 1)]} ${crtDate[2].substr(0,2)}, ${crtDate[0]}`;
   let caseDate = document.createElement("h3");
-  caseDate.textContent = `Next court date: ${cdStr}`;
+  caseDate.textContent = `Next court date ${cdStr}`;
   divCaseInfo.append(seattlevh1, caseNo, caseCharge, caseDate);
 
   // display any previous case events
