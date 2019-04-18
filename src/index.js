@@ -156,6 +156,63 @@ function displayCaseFile(info) {
 }
 
 // -----------------------------------------------------------------
+// Get and display session list
+// -----------------------------------------------------------------
+
+const sessionList = document.getElementById("searchSession");
+sessionList.addEventListener("submit", (e) => {
+  e.preventDefault();
+  fetch(DB_CASES_URL)
+  .then(response => response.json())
+  .then(cases => {
+    let seshDate = sessionList[0].value;
+    let results = cases.filter(ci => ci.courtdate.includes(seshDate));
+    displayResults(seshDate, results);
+  })
+})
+
+function displayResults(date, cases) {
+  clearDisplayPane();
+  // create div element
+  let divResultsPage = document.createElement("div");
+  divResultsPage.setAttribute("class", "col");
+
+  // header
+  let h3ResultsDate = document.createElement("h3");
+  let sDateSplit = date.split("-");
+  let sDateStr = `${MONTH[parseInt(sDateSplit[1]) - 1]} ${sDateSplit[2]}, ${sDateSplit[0]}`;
+  h3ResultsDate.textContent = `Cases scheduled for ${sDateStr}`;
+
+  // table to display results
+  let tableResults = document.createElement("table");
+  tableResults.setAttribute("class", "table table-dark table-bordered")
+  let thResults = document.createElement("tr");
+  thResults.innerHTML = `
+  <th>Case No.</th>
+  <th>First Name</th>
+  <th>Last Name</th>
+  <th>Crime</th>
+  `;
+  tableResults.append(thResults);
+
+  for (let i of cases) {
+    let trRes = document.createElement("tr");
+    trRes.innerHTML = `
+    <td>${i.id}</td>
+    <td>${i.firstname}</td>
+    <td>${i.lastname}</td>
+    <td>${i.crime}</td>
+    `
+    tableResults.append(trRes);
+  }
+
+  // attach elements to divResultsPage
+  divResultsPage.append(h3ResultsDate, tableResults);
+  return displayPane.append(divResultsPage);
+}
+
+
+// -----------------------------------------------------------------
 // Create a Criminal from SPD website
 // -----------------------------------------------------------------
 const displayPane = document.getElementById("display-info");
@@ -174,12 +231,11 @@ const displayData = (data, date) => {
   tableDisplay.setAttribute("class", "table table-dark table-bordered");
   const header = document.createElement("tr");
   header.innerHTML = `
-  <tr>
     <th>Incident #</th>
     <th>Crime</th>
     <th>Neighborhood</th>
     <th>File Charges?</th>
-  </tr>`;
+  `;
   tableDisplay.append(header);
 
   for (let d of data) {
