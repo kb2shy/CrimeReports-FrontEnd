@@ -21,7 +21,7 @@ Cases that are scheduled for future court dates can be viewed and selected from 
 * Update case files with specific case information or docket entries
 
 ## Backend server deployed on heroku
-JSON API can be seen at [link to heroku-server!](https://create-a-criminal.herokuapp.com/cases)
+JSON API can be seen at [my heroku-server.](https://create-a-criminal.herokuapp.com/cases)
 
 ## (Demo?)
 
