@@ -1,6 +1,6 @@
 // Backend Database
-const DB_CASES_URL = "http://localhost:3000/cases"
-const DB_EVENTS_URL = "http://localhost:3000/events"
+const DB_CASES_URL = "https://create-a-criminal.herokuapp.com/cases"
+const DB_EVENTS_URL = "https://create-a-criminal.herokuapp.com/events"
 
 // Seattle.gov SPD police report API
 const SPD_API_URL = "https://data.seattle.gov/resource/4fs7-3vj5.json"
@@ -404,7 +404,7 @@ function displayChargesForm(data) {
     c.neighborhood = data.neighborhood;
     c.dov = data.occ_datetime;
     // console.log(c);
-    fetch("http://localhost:3000/cases", {
+    fetch(DB_CASES_URL, {
       method: "POST",
       headers: { 'Content-Type' : 'application/json',
                   Accept: 'application/json'},
@@ -418,7 +418,7 @@ function displayChargesForm(data) {
 function displayNewCaseFile(c) {
   clearDisplayPane();
 
-  fetch("http://localhost:3000/cases")
+  fetch(DB_CASES_URL)
   .then(response => response.json())
   .then(cases => {
     let caseNum = cases.length + 1;
