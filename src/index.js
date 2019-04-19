@@ -187,27 +187,35 @@ function displayResults(date, cases) {
 
   // table to display results
   let tableResults = document.createElement("table");
-  tableResults.setAttribute("class", "table table-dark table-bordered")
-  let thResults = document.createElement("tr");
+  tableResults.setAttribute("class", "table table-hover table-dark table-bordered")
+  let thResults = document.createElement("thead");
   thResults.innerHTML = `
-  <th>Case No.</th>
-  <th>First Name</th>
-  <th>Last Name</th>
-  <th>Crime</th>
+  <tr>
+    <th>Case No.</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Crime</th>
+  </tr>
   `;
   tableResults.append(thResults);
+  let tbResults = document.createElement("tbody");
 
   for (let i of cases) {
     let trRes = document.createElement("tr");
     trRes.innerHTML = `
-    <td>${i.id}</td>
+    <th scope="row">${i.id}</th>
     <td>${i.firstname}</td>
     <td>${i.lastname}</td>
     <td>${i.crime}</td>
     `
-    tableResults.append(trRes);
+    trRes.addEventListener("click", () => {
+      fetch(DB_CASES_URL + `/${i.id}`)
+      .then(response => response.json())
+      .then(info => displayCaseFile(info))
+    })
+    tbResults.append(trRes);
   }
-
+  tableResults.append(thResults, tbResults)
   // attach elements to divResultsPage
   divResultsPage.append(h3ResultsDate, tableResults);
   return displayPane.append(divResultsPage);
