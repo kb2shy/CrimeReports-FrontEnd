@@ -8,11 +8,12 @@ const DOV_URL = "?reported_date=";
 const TIME_APPEND = "T00:00:00.000";
 const CRIME_URL = "&crime_subcategory=";
 
-// Establish date info
+// Parse date to get literal month instead of numerical month
 const MONTH = ["January", "February", "March", "April", "May", "June", "July",
                "August", "September", "October", "November", "December"];
-const DAY_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+// const DAY_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
+// Mugshot links
 const MUGSHOT = ["https://imgix.ranker.com/user_node_img/50060/1001191352/original/b-photo-u1?w=650&q=50&fm=pjpg&fit=crop&crop=faces",
  "https://imgix.ranker.com/user_node_img/50060/1001191368/original/j-photo-u1?w=650&q=50&fm=pjpg&fit=crop&crop=faces",
  "https://imgix.ranker.com/user_node_img/50060/1001191376/original/j-photo-u1?w=650&q=50&fm=pjpg&fit=crop&crop=faces",
@@ -160,7 +161,6 @@ function displayCaseFile(info) {
 // -----------------------------------------------------------------
 // Get and display session list
 // -----------------------------------------------------------------
-
 const sessionList = document.getElementById("searchSession");
 sessionList.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -227,7 +227,6 @@ function displayResults(date, cases) {
 const fetchCriminalInfo = document.getElementById("get-SPD-crimes")
 fetchCriminalInfo.addEventListener('submit', (e) => {
   e.preventDefault();
-  // console.log("Get Criminal button clicked");
   let date = document.getElementById("date-input").value;
   if (date === "") {
     date = new Date();
@@ -272,7 +271,6 @@ const displayData = (data, date) => {
   let thisDay = thisDate[2].substr(0,2);
   thisDate = MONTH[thisMonth] + " " + thisDay + ", " + thisYear;
   const h3 = document.createElement("h3")
-  // console.log(thisDate)
   h3.textContent = `Crimes committed on ${thisDate}`;
   const tableDisplay = document.createElement("table");
   tableDisplay.setAttribute("class", "table table-dark table-bordered");
@@ -306,6 +304,9 @@ const displayData = (data, date) => {
   return displayPane.append(h3, tableDisplay);
 }
 
+// -----------------------------------------------------------------
+// Display criminal charge form
+// -----------------------------------------------------------------
 function displayChargesForm(data) {
   clearDisplayPane();
 
@@ -403,7 +404,6 @@ function displayChargesForm(data) {
     c.crime = data.crime_subcategory;
     c.neighborhood = data.neighborhood;
     c.dov = data.occ_datetime;
-    // console.log(c);
     fetch("http://localhost:3000/cases", {
       method: "POST",
       headers: { 'Content-Type' : 'application/json',
@@ -415,6 +415,9 @@ function displayChargesForm(data) {
   })
 }
 
+// -----------------------------------------------------------------
+// Display newly created case file from charge form
+// -----------------------------------------------------------------
 function displayNewCaseFile(c) {
   clearDisplayPane();
 
@@ -424,10 +427,7 @@ function displayNewCaseFile(c) {
     let caseNum = cases.length + 1;
     let dateSplit = c.courtdate.split("-");
     let month = MONTH[parseInt(dateSplit[1])-1];
-    console.log(month)
-    debugger
     let dateStr = `${month} ${dateSplit[2]}, ${dateSplit[0]}`
-    console.log(dateStr)
     let div = document.createElement("div");
     div.innerHTML = `
     <div class="row">
@@ -447,14 +447,18 @@ function displayNewCaseFile(c) {
   })
 }
 
+// -----------------------------------------------------------------
+// Clear display pane
+// -----------------------------------------------------------------
 function clearDisplayPane() {
   while(displayPane.firstChild) {
     displayPane.removeChild(displayPane.firstChild);
   }
 }
 
-
-
+// -----------------------------------------------------------------
+// Case class
+// -----------------------------------------------------------------
 class Case {
   constructor (imageurl, firstname, lastname, courtdate, gonumber, crime, neighborhood, dov){
     this.imageurl = imageurl;
