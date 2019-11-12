@@ -1,6 +1,8 @@
 // Backend Database
-const DB_CASES_URL = "https://create-a-criminal.herokuapp.com/cases"
-const DB_EVENTS_URL = "https://create-a-criminal.herokuapp.com/events"
+// const DB_CASES_URL = "https://create-a-criminal.herokuapp.com/cases"
+// const DB_EVENTS_URL = "https://create-a-criminal.herokuapp.com/events"
+const DB_CASES_URL = "http://localhost:3000/cases";
+const DB_EVENTS_URL = "http://localhost:3000/events";
 
 // Seattle.gov SPD police report API
 const SPD_API_URL = "https://data.seattle.gov/resource/4fs7-3vj5.json"

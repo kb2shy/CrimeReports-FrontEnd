@@ -20,10 +20,8 @@ Cases that are scheduled for future court dates can be viewed and selected from 
 * Create criminal case files based on results generated
 * Update case files with specific case information or docket entries
 
-## (Deploy to Heroku?)
-SPA can be accessed on (web browser)
-
-## (Demo?)
+## Video Demo
+[Project Demo: Crime Reports](https://youtu.be/h5ghSfwDBXI)
 
 ## Future Features
 * Create a model in the backend that stores each criminal's information
